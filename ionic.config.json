@@ -1,0 +1,7 @@
+{
+  "name": "site crmm",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
