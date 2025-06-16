@@ -1,0 +1,34 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title>Clientes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-list>
+    <ion-item *ngFor="let cliente of clientes; let i = index">
+      <ion-icon name="person-circle-outline" slot="start" size="large" color="primary"></ion-icon>
+      <ion-label>
+        <h2>{{ cliente.nome }}</h2>
+        <p>
+          <strong>Email:</strong> {{ cliente.email }}<br>
+          <strong>Telefone:</strong> {{ cliente.numero }}<br>
+          <strong>Empresa:</strong> {{ cliente.empresa }}<br>
+          <strong>Nota:</strong> {{ cliente.nota }}
+        </p>
+      </ion-label>
+      <ion-button fill="clear" color="medium" slot="end" [routerLink]="['/editar-cliente', i]">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-button>
+      <ion-button fill="clear" color="danger" slot="end" (click)="excluirCliente(i)">
+        <ion-icon name="trash-outline"></ion-icon>
+      </ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+    <ion-fab-button color="success" [routerLink]="['/cadastro-clientes']">
+      <ion-icon name="person-add-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

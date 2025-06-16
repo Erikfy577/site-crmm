@@ -111,8 +111,12 @@
                 "output": "./svg"
               }
             ],
-            "styles": ["src/global.scss", "src/theme/variables.scss"],
-            "scripts": []
+            "styles": ["src/global.scss",
+             "src/theme/variables.scss"],
+             
+            "scripts": [
+              "https://cdn.jsdelivr.net/npm/chart.js"
+            ]
           },
           "configurations": {
             "ci": {
@@ -136,7 +140,8 @@
   "cli": {
     "schematicCollections": [
       "@ionic/angular-toolkit"
-    ]
+    ],
+    "analytics": "775d5f49-0e9b-4d8a-a222-dd446eabc588"
   },
   "schematics": {
     "@ionic/angular-toolkit:component": {

@@ -1,0 +1,121 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>
+      <ion-icon name="person-circle-outline" style="vertical-align: middle; font-size: 2rem;"></ion-icon>
+      Olá, {{ nomeUsuario || 'Usuário' }}
+    </ion-title>
+    <div class="clock-top">
+      <svg width="60" height="60" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="48" stroke="#3880ff" stroke-width="4" fill="white"/>
+        <line [attr.x1]="50" [attr.y1]="50" [attr.x2]="clockHourX" [attr.y2]="clockHourY" stroke="#222" stroke-width="4"/>
+        <line [attr.x1]="50" [attr.y1]="50" [attr.x2]="clockMinuteX" [attr.y2]="clockMinuteY" stroke="#222" stroke-width="2"/>
+        <line [attr.x1]="50" [attr.y1]="50" [attr.x2]="clockSecondX" [attr.y2]="clockSecondY" stroke="#eb445a" stroke-width="1"/>
+        <circle cx="50" cy="50" r="2" fill="#222"/>
+      </svg>
+      <div class="clock-digital">{{ horaAtual | date:'HH:mm:ss' }}</div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-card class="dashboard-card clientes">
+          <ion-card-header>
+            <ion-icon name="people-outline" class="dashboard-icon"></ion-icon>
+            <ion-card-title>Total de Clientes</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <h1>{{ totalClientes }}</h1>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+      <ion-col size="6">
+        <ion-card class="dashboard-card empresas">
+          <ion-card-header>
+            <ion-icon name="business-outline" class="dashboard-icon"></ion-icon>
+            <ion-card-title>Total de Empresas</ion-card-title>
+          </ion-card-header>
+          <ion-card-content>
+            <h1>{{ totalEmpresas }}</h1>
+          </ion-card-content>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div class="calendar-graph-container">
+    <div class="calendar-block">
+      <div class="calendar-header">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <span>{{ mesAtual | date:'MMMM yyyy' }}</span>
+      </div>
+      <div class="calendar-days-names">
+        <div *ngFor="let nome of nomesDias">{{ nome }}</div>
+      </div>
+      <div class="calendar-days-grid">
+        <div *ngFor="let dia of diasDoMes; let i = index"
+             class="calendar-day"
+             [class.today]="dia === diaHoje"
+             [class.empty]="!dia">
+          <span *ngIf="dia">{{ dia }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="dashboard-card notes-card">
+      <div class="notes-header">
+        <span>
+          <ion-icon name="list-outline" class="dashboard-icon"></ion-icon>
+          Bloco de Notas
+        </span>
+        <ion-button fill="clear" size="small" (click)="abrirModalNota()">
+          <ion-icon name="add-circle-outline" slot="icon-only"></ion-icon>
+        </ion-button>
+      </div>
+      <ul class="notes-list">
+        <li *ngFor="let nota of notas">
+          <span>{{ nota.texto }}</span>
+          <ion-badge [color]="corNota(nota.importancia)">
+            {{ nota.importancia | titlecase }}
+          </ion-badge>
+          <ion-icon name="trash-outline" class="delete-icon" (click)="removerNota(nota)"></ion-icon>
+        </li>
+        <li *ngIf="notas.length === 0" class="notes-empty">Nenhuma nota adicionada.</li>
+      </ul>
+    </div>
+  </div>
+
+<!-- Dentro do seu home.component.html, fora do <ion-content> principal -->
+<ion-modal
+  [isOpen]="modalAberto"
+  (didDismiss)="fecharModalNota()"
+  [breakpoints]="[0, 0.4, 0.7]"
+  [initialBreakpoint]="0.4"
+  class="custom-modal"
+  keepContentsMounted="true"
+>
+  <ion-header>
+    <ion-toolbar color="primary">
+      <ion-title>Nova Nota</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="fecharModalNota()">Fechar</ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <form (ngSubmit)="adicionarNota()">
+      <ion-item>
+        <ion-input [(ngModel)]="novaNota" name="novaNota" placeholder="Digite sua nota..." required></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-select [(ngModel)]="importanciaNota" name="importanciaNota" placeholder="Importância" interface="popover" required>
+          <ion-select-option value="urgente">Urgente</ion-select-option>
+          <ion-select-option value="intermediaria">Intermediária</ion-select-option>
+          <ion-select-option value="padrao">Padrão</ion-select-option>
+        </ion-select>
+      </ion-item>
+      <ion-button expand="block" type="submit" color="primary" class="ion-margin-top">Adicionar</ion-button>
+    </form>
+  </ion-content>
+</ion-modal>
