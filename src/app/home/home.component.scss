@@ -6,11 +6,11 @@ ion-toolbar {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
-    margin-right: 1rem;
+    margin-right: 2rem;
     .clock-digital {
-      font-size: 1.1rem;
+      font-size: 1.6rem;
       font-weight: bold;
-      color: #3880ff;
+      color: #002e7e;
     }
   }
 }
@@ -117,6 +117,8 @@ ion-toolbar {
       margin-right: 0.5rem;
     }
   }
+}
+
 .dashboard-card.notes-card {
   background: linear-gradient(135deg, #06f025 0%, #f3ffe4 100%);
   min-width: 280px;
@@ -187,31 +189,47 @@ ion-toolbar {
     }
   }
 }
+
+/* POPUP CUSTOMIZADO CENTRALIZADO */
+.popup-backdrop {
+  position: fixed;
+  z-index: 10000;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* O seletor do modal deve ficar FORA do bloco acima */
-::ng-deep .custom-modal .modal-wrapper {
-  border-radius: 18px !important;
-  max-width: 400px;
-  margin: 0 auto;
-  top: 20vh !important;
-  left: 0;
+.popup-card {
+  background: #02f8b6;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(3, 233, 34, 0.397);
+  max-width: 350px;
+  width: 90vw;
+  padding: 1.5rem 1rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  animation: popupIn 0.5s;
 }
-::ng-deep .custom-modal .modal-wrapper {
-  background: #fff !important;
-  color: #222 !important;
-  border-radius: 18px !important;
-  max-width: 400px;
-  margin: 0 auto;
-  top: 20vh !important;
-  left: 0;
+
+@keyframes popupIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
-::ng-deep .custom-modal ion-content {
-  --background: #fff !important;
-  color: #222 !important;
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-::ng-deep .custom-modal ion-input,
-::ng-deep .custom-modal ion-select,
-::ng-deep .custom-modal ion-label {
-  color: #222 !important;
+.popup-header span {
+  font-size: 1.3rem; // ajuste o valor como quiser
+  font-weight: bold;
+}
+
+.popup-close {
+  font-size: 2.5rem; // ajuste o valor como quiser
+  color: #1100ad;
+  cursor: pointer;
 }

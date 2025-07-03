@@ -30,6 +30,12 @@ export class HomeComponent implements OnInit {
   diasDoMes: (number | null)[] = [];
   diaHoje = new Date().getDate();
 
+  // Notas (bloco de notas)
+  popupAberto = false;
+  novaNota = '';
+  importanciaNota = '';
+  notas: { texto: string, importancia: string }[] = [];
+
   ngOnInit() {
     this.atualizarResumo();
     this.atualizarRelogio();
@@ -38,7 +44,6 @@ export class HomeComponent implements OnInit {
       this.horaAtual = new Date();
       this.atualizarRelogio();
     }, 1000);
-    setTimeout(() => this.gerarGrafico(), 300);
     this.carregarNotas();
   }
 
@@ -77,78 +82,40 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  gerarGrafico() {
-    const clientes = JSON.parse(localStorage.getItem('clientes') || '[]');
-    const empresas: { [key: string]: number } = {};
-    clientes.forEach((c: any) => {
-      if (c.empresa) {
-        empresas[c.empresa] = (empresas[c.empresa] || 0) + 1;
-      }
-    });
-    const ctx = (document.getElementById('clientesChart') as HTMLCanvasElement)?.getContext('2d');
-    if (ctx && (window as any).Chart) {
-      new (window as any).Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: Object.keys(empresas),
-          datasets: [{
-            label: 'Clientes',
-            data: Object.values(empresas),
-            backgroundColor: '#3880ff'
-          }]
-        },
-        options: {
-          responsive: true,
-          plugins: { legend: { display: false } }
-        }
-      });
+  // Métodos do pop-up customizado para notas
+  abrirPopupNota() {
+    this.popupAberto = true;
+  }
+
+  fecharPopupNota() {
+    this.popupAberto = false;
+    this.novaNota = '';
+    this.importanciaNota = '';
+  }
+
+  adicionarNota() {
+    if (this.novaNota && this.importanciaNota) {
+      this.notas.unshift({ texto: this.novaNota, importancia: this.importanciaNota });
+      localStorage.setItem('notas', JSON.stringify(this.notas));
+      this.fecharPopupNota();
     }
   }
-// ...existing code...
-modalAberto = false;
-novaNota = '';
-importanciaNota = '';
-notas: { texto: string, importancia: string }[] = [];
 
-
-
-abrirModalNota() {
-  this.modalAberto = true;
-}
-
-fecharModalNota() {
-  this.modalAberto = false;
-  this.novaNota = '';
-  this.importanciaNota = '';
-}
-
-adicionarNota() {
-  if (this.novaNota && this.importanciaNota) {
-    this.notas.unshift({ texto: this.novaNota, importancia: this.importanciaNota });
+  removerNota(nota: { texto: string, importancia: string }) {
+    this.notas = this.notas.filter(n => n !== nota);
     localStorage.setItem('notas', JSON.stringify(this.notas));
-    this.fecharModalNota();
-  }
-}
-
-removerNota(nota: { texto: string, importancia: string }) {
-  this.notas = this.notas.filter(n => n !== nota);
-  localStorage.setItem('notas', JSON.stringify(this.notas));
-}
-
-carregarNotas() {
-  const notasSalvas = localStorage.getItem('notas');
-  this.notas = notasSalvas ? JSON.parse(notasSalvas) : [];
-}
-
-corNota(importancia: string) {
-  switch (importancia) {
-    case 'urgente': return 'danger';
-    case 'intermediaria': return 'warning';
-    default: return 'primary';
   }
 
+  carregarNotas() {
+    const notasSalvas = localStorage.getItem('notas');
+    this.notas = notasSalvas ? JSON.parse(notasSalvas) : [];
+  }
+
+  corNota(importancia: string) {
+    switch (importancia) {
+      case 'urgente': return 'danger';
+      case 'intermediaria': return 'warning';
+      default: return 'primary';
+    }
+  }
 }
-
-}
-
-

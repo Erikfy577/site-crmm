@@ -69,7 +69,7 @@
           <ion-icon name="list-outline" class="dashboard-icon"></ion-icon>
           Bloco de Notas
         </span>
-        <ion-button fill="clear" size="small" (click)="abrirModalNota()">
+        <ion-button fill="clear" size="small" (click)="abrirPopupNota()">
           <ion-icon name="add-circle-outline" slot="icon-only"></ion-icon>
         </ion-button>
       </div>
@@ -86,24 +86,13 @@
     </div>
   </div>
 
-<!-- Dentro do seu home.component.html, fora do <ion-content> principal -->
-<ion-modal
-  [isOpen]="modalAberto"
-  (didDismiss)="fecharModalNota()"
-  [breakpoints]="[0, 0.4, 0.7]"
-  [initialBreakpoint]="0.4"
-  class="custom-modal"
-  keepContentsMounted="true"
->
-  <ion-header>
-    <ion-toolbar color="primary">
-      <ion-title>Nova Nota</ion-title>
-      <ion-buttons slot="end">
-        <ion-button (click)="fecharModalNota()">Fechar</ion-button>
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content class="ion-padding">
+<!-- Pop-up customizado para adicionar nota -->
+<div class="popup-backdrop" *ngIf="popupAberto">
+  <div class="popup-card">
+    <div class="popup-header">
+      <span>Adicionar Nova Nota</span>
+      <ion-icon name="close-outline" class="popup-close" (click)="fecharPopupNota()"></ion-icon>
+    </div>
     <form (ngSubmit)="adicionarNota()">
       <ion-item>
         <ion-input [(ngModel)]="novaNota" name="novaNota" placeholder="Digite sua nota..." required></ion-input>
@@ -117,5 +106,5 @@
       </ion-item>
       <ion-button expand="block" type="submit" color="primary" class="ion-margin-top">Adicionar</ion-button>
     </form>
-  </ion-content>
-</ion-modal>
+  </div>
+</div>
